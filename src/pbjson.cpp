@@ -213,14 +213,15 @@ namespace pbjson
                 {
                     for (size_t i = 0; i != array_size; ++i)
                     {
-                        const EnumValueDescriptor* value = ref->GetRepeatedEnum(*msg, field, i);
-                        rapidjson::Value v(value->number());
+                        std::string value = ref->GetRepeatedEnum(*msg, field, i)->name();
+                        rapidjson::Value v(value.c_str(), static_cast<rapidjson::SizeType>(value.size()), allocator);
                         json->PushBack(v, allocator);
                     }
                 }
                 else
                 {
-                    json = new rapidjson::Value(ref->GetEnum(*msg, field)->number());
+                    std::string value = ref->GetEnum(*msg, field)->name();
+                    json = new rapidjson::Value(value.c_str(), value.size(), allocator);
                 }
                 break;
             default:
